@@ -1,5 +1,70 @@
-# Vue 3 + TypeScript + Vite
+# 📊 Daily Sales Overview – Case Study
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A modern and responsive sales dashboard built with **Vue 3**, **Vuex**, **TypeScript**, **TailwindCSS**, and **ApexCharts**. This project aims to visualize sales data interactively, focusing on clean architecture, secure login, and effective state management.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+---
+
+## 🔗 Live Demo
+
+👉 [daily-sales-psi.vercel.app/login](https://daily-sales-psi.vercel.app/login)
+
+---
+
+## 🎯 Purpose
+
+This case study demonstrates the development of a responsive, user-friendly dashboard interface that allows users to:
+
+- Log in securely with real-time error handling
+- View recent sales data in bar chart format
+- Filter results by specific day ranges (7, 14, 30, 60 days)
+- Navigate seamlessly across devices
+
+---
+
+## ✨ Features
+
+### 🔐 Login
+
+- Email/password login functionality
+- Displays error messages for incorrect credentials or failed requests
+- Redirects to dashboard on successful login
+
+### 📊 Sales Dashboard
+
+- Interactive bar chart visualization using `vue3-apexcharts`
+- Filters for last **7**, **14**, **30**, and **60** days
+- Displays sales, quantity, and shipping details by SKU
+
+> ⚠️ Note: Due to limitations in ApexCharts, bar click interaction may appear to select only part of the bar visually.
+
+### 📱 Responsive Design
+
+- Fully responsive layout using TailwindCSS
+- Optimized for desktop, tablet, and mobile views
+
+---
+
+## ⚙️ Project Setup
+
+To run the project locally:
+
+\`\`\`bash
+
+# Clone the repository
+
+git clone https://github.com/mervekara/daily-sales.git
+
+# Navigate into the project directory
+
+cd daily-sales-overview
+
+# Install dependencies
+
+npm install
+
+# Run the development server
+
+npm run dev
+\`\`\`
+
+---
