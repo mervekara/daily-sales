@@ -34,7 +34,7 @@ const displayedTableData = computed(() => {
 });
 
 const totalPages = computed(() =>
-  Math.ceil(tableData.value.length / itemsPerPage)
+  Math.ceil(tableData.value.length / itemsPerPage),
 );
 
 const fetchTableData = async () => {
@@ -76,7 +76,7 @@ watch(
     currentPage.value = 1;
     fetchTableData();
   },
-  { deep: true }
+  { deep: true },
 );
 
 defineExpose({ selectedColumns });

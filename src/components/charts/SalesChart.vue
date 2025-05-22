@@ -26,7 +26,7 @@ const emit = defineEmits<{
 const chartRef = ref(null);
 
 const validData = computed(() =>
-  props.chartData.filter((item) => !isNaN(new Date(item.date).getTime()))
+  props.chartData.filter((item) => !isNaN(new Date(item.date).getTime())),
 );
 
 const series = computed(() => [
@@ -62,7 +62,7 @@ const computedOptions = computed<ApexOptions>(() => ({
   },
   xaxis: {
     categories: validData.value.map((item) =>
-      new Date(item.date).toLocaleDateString()
+      new Date(item.date).toLocaleDateString(),
     ),
   },
   colors: ["#3b82f6", "#10b981", "#f59e0b"],

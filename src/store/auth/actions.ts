@@ -23,7 +23,7 @@ export const actions: ActionTree<AuthState, RootState> = {
 
   async fetchUserInformation(
     { commit, state }: ActionContext<AuthState, RootState>,
-    email: string
+    email: string,
   ) {
     try {
       const params: User = {

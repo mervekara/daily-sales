@@ -19,7 +19,7 @@ import { UserInfo } from "../../types/auth";
 export const fetchSkuRefundRate = async (
   userInfo: UserInfo,
   rootState: RootState,
-  skuList: DailySalesSkuListItem[]
+  skuList: DailySalesSkuListItem[],
 ): Promise<SkuRefundRateResponse["Data"]> => {
   try {
     const accessToken = rootState.auth.accessToken;
@@ -36,7 +36,7 @@ export const fetchSkuRefundRate = async (
 
     const response = await fetchSkuRefundRateRequest(
       skuRefundRateRequest,
-      accessToken
+      accessToken,
     );
 
     return response.Data;
@@ -68,7 +68,7 @@ export const actions: ActionTree<ChartState, RootState> = {
 
         const response = await fetchChartInformationRequest(
           chartRequestData,
-          rootState.auth.accessToken
+          rootState.auth.accessToken,
         );
 
         if (response.Data.item.length > 0) {
@@ -85,7 +85,7 @@ export const actions: ActionTree<ChartState, RootState> = {
 
   async fetchTableData(
     { commit, rootState }: ActionContext<ChartState, RootState>,
-    payload: FetchTableDataPayload
+    payload: FetchTableDataPayload,
   ) {
     try {
       if (!rootState.auth.accessToken) {
@@ -107,13 +107,13 @@ export const actions: ActionTree<ChartState, RootState> = {
 
         const response = await fetchTableDataRequest(
           chartRequestData,
-          rootState.auth.accessToken
+          rootState.auth.accessToken,
         );
 
         const skuRefundRate = await fetchSkuRefundRate(
           userInfo,
           rootState,
-          response.Data.item.skuList
+          response.Data.item.skuList,
         );
         tableData.push(skuRefundRate);
       }
