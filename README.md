@@ -1,4 +1,4 @@
-# 📊 Daily Sales Overview – Case Study
+# 📊 Daily Sales Overview
 
 A modern and responsive sales dashboard built with **Vue 3**, **Vuex**, **TypeScript**, **TailwindCSS**, and **ApexCharts**. This project aims to visualize sales data interactively, focusing on clean architecture, secure login, and effective state management.
 
