@@ -4,7 +4,7 @@ import {
   DailySalesOverviewResponse,
   DailySalesSkuListResponse,
   SkuRefundRateResponse,
-} from "@/types/chart";
+} from "../types/chart";
 
 export const fetchSkuRefundRate = async (
   params: object,

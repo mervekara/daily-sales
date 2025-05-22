@@ -1,5 +1,5 @@
-import { AuthState } from "@/types/auth";
-import { ChartState } from "@/types/chart";
+import { AuthState } from "../types/auth";
+import { ChartState } from "../types/chart";
 
 export interface RootState {
   version: string;

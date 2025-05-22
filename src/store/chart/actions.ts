@@ -14,7 +14,7 @@ import {
   fetchChartInformation as fetchChartInformationRequest,
   fetchTableData as fetchTableDataRequest,
 } from "../../services/chart";
-import { UserInfo } from "@/types/auth";
+import { UserInfo } from "../../types/auth";
 
 export const fetchSkuRefundRate = async (
   userInfo: UserInfo,
