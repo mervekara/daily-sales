@@ -40,30 +40,3 @@ export interface AuthState {
   accessToken: string | null;
   userInformation: UserInfo[];
 }
-
-export interface AuthGetters {
-  isAuthenticated: boolean;
-}
-
-export const SET_CHART_DATA = "SET_CHART_DATA";
-export const SET_TABLE_DATA = "SET_TABLE_DATA";
-
-export interface ChartState {
-  chartData: ChartData | null;
-  tableData: any[];
-}
-
-export interface ChartData {
-  series: ChartSeries[];
-  categories: string[];
-}
-
-export interface ChartSeries {
-  name: string;
-  data: number[];
-}
-
-export interface FetchTableDataPayload {
-  columns: any[];
-  pageNumber: number | 1;
-}

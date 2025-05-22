@@ -1,4 +1,5 @@
-import { AuthState, ChartState } from "@/types/auth";
+import { AuthState } from "@/types/auth";
+import { ChartState } from "@/types/chart";
 
 export interface RootState {
   version: string;

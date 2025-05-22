@@ -2,8 +2,7 @@ import { Module } from "vuex";
 import { RootState } from "../types";
 import { actions } from "./actions";
 import { mutations } from "./mutations";
-import { getters } from "./getters";
-import { ChartState } from "@/types/auth";
+import { ChartState } from "@/types/chart";
 
 const state: ChartState = {
   chartData: null,
@@ -15,5 +14,4 @@ export const chart: Module<ChartState, RootState> = {
   state,
   actions,
   mutations,
-  getters,
 };

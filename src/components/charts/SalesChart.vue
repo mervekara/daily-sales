@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 bg-white rounded-lg shadow">
-    <apexchart
+    <ApexChart
       ref="chartRef"
       type="bar"
       :options="computedOptions"
@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import type { ApexOptions } from "apexcharts";
-import { ChartDataItem } from "@/types/chart";
+import { ChartDataItem } from "src/types/chart";
 
 const props = defineProps<{
   chartData: ChartDataItem[];
@@ -75,9 +75,6 @@ const computedOptions = computed<ApexOptions>(() => ({
       horizontal: false,
       columnWidth: "50%",
     },
-  },
-  legend: {
-    position: "top",
   },
 }));
 </script>

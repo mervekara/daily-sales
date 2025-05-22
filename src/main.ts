@@ -22,9 +22,8 @@ const router = createRouter({
 
 const app = createApp(App);
 
-app.use(VueApexCharts);
-
 app.use(store);
 app.use(router);
+app.component("ApexChart", VueApexCharts);
 
 app.mount("#app");

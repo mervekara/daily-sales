@@ -3,13 +3,10 @@ import { RootState } from "../types";
 
 import {
   ChartState,
+  DailySalesSkuListItem,
   FetchTableDataPayload,
   SET_CHART_DATA,
   SET_TABLE_DATA,
-  UserInfo,
-} from "../../types/auth";
-import {
-  DailySalesSkuListItem,
   SkuRefundRateResponse,
 } from "../../types/chart";
 import {
@@ -17,6 +14,7 @@ import {
   fetchChartInformation as fetchChartInformationRequest,
   fetchTableData as fetchTableDataRequest,
 } from "../../services/chart";
+import { UserInfo } from "@/types/auth";
 
 export const fetchSkuRefundRate = async (
   userInfo: UserInfo,

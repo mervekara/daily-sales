@@ -23,8 +23,6 @@
       </div>
     </div>
 
-    <BaseAlert v-if="errorMessage" :message="errorMessage" class="mb-4" />
-
     <!-- Chart and Table -->
     <ChartComponent
       @bar-selected="handleBarSelected"
@@ -39,23 +37,19 @@ import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import ChartComponent from "../charts/ChartComponent.vue";
 import TableComponent from "../table/TableComponent.vue";
-import BaseAlert from "../forms/BaseAlert.vue";
 
 const store = useStore();
 const selectedDays = ref(7);
 const selectedDate = ref<string | null>(null);
 const tableRef = ref<any>();
-const errorMessage = ref("");
 
 const updateChartData = async () => {
   try {
-    errorMessage.value = "";
     await store.dispatch("chart/fetchChartInformation", {
       days: selectedDays.value,
     });
   } catch (error) {
     console.error("Error updating chart data:", error);
-    errorMessage.value = "An unexpected error occurred.";
   }
 };
 
