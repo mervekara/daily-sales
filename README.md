@@ -44,21 +44,21 @@ This case study demonstrates the development of a responsive, user-friendly dash
 
 ---
 
-## ⚙️ Project Setup
+# ⚙️ Project Setup
 
-# Clone the repository
+## Clone the repository
 
 git clone https://github.com/mervekara/daily-sales.git
 
-# Navigate into the project directory
+## Navigate into the project directory
 
 cd daily-sales
 
-# Install dependencies
+## Install dependencies
 
 npm install
 
-# Run the development server
+## Run the development server
 
 npm run dev
 
