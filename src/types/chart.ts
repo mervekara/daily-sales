@@ -113,3 +113,5 @@ export interface ChartDataItem {
   fbaAmount?: number;
   fbmAmount?: number;
 }
+
+export const DEFAULT_PAGE_SIZE = 5;

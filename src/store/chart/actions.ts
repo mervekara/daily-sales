@@ -4,77 +4,82 @@ import { RootState } from "../types";
 import {
   ChartState,
   DailySalesSkuListItem,
+  DEFAULT_PAGE_SIZE,
   FetchTableDataPayload,
   SET_CHART_DATA,
   SET_TABLE_DATA,
   SkuRefundRateResponse,
 } from "../../types/chart";
+
 import {
   fetchSkuRefundRate as fetchSkuRefundRateRequest,
   fetchChartInformation as fetchChartInformationRequest,
   fetchTableData as fetchTableDataRequest,
 } from "../../services/chart";
+
 import { UserInfo } from "../../types/auth";
 
-export const fetchSkuRefundRate = async (
-  userInfo: UserInfo,
-  rootState: RootState,
-  skuList: DailySalesSkuListItem[],
-): Promise<SkuRefundRateResponse["Data"]> => {
-  try {
-    const accessToken = rootState.auth.accessToken;
-    if (!accessToken) {
-      throw new Error("Access token is missing");
-    }
+const ensureAccessToken = (accessToken: string | null | undefined): string => {
+  if (!accessToken) throw new Error("Access token is missing");
+  return accessToken;
+};
 
-    const skuRefundRateRequest = {
-      marketplace: userInfo.marketplace,
-      sellerId: userInfo.sellerId,
-      skuList,
-      requestedDay: 0,
-    };
-
-    const response = await fetchSkuRefundRateRequest(
-      skuRefundRateRequest,
-      accessToken,
-    );
-
-    return response.Data;
-  } catch (error) {
-    console.error("Error fetching SKU refund rate for user:", userInfo, error);
-    throw error;
+const validateUserInformation = (
+  userInfo: UserInfo[] | null | undefined
+): UserInfo[] => {
+  if (!Array.isArray(userInfo) || userInfo.length === 0) {
+    throw new Error("User information is missing or invalid");
   }
+  return userInfo;
+};
+
+const fetchChartDataForUser = async (
+  userInfo: UserInfo,
+  accessToken: string,
+  day: number
+) => {
+  const requestData = {
+    marketplace: userInfo.marketplace,
+    sellerId: userInfo.sellerId,
+    requestStatus: userInfo.requestStatus,
+    day,
+    excludeYoYData: userInfo.excludeYoYData,
+  };
+
+  const response = await fetchChartInformationRequest(requestData, accessToken);
+  return response?.Data?.item || [];
+};
+
+const fetchSkuRefundRate = async (
+  userInfo: UserInfo,
+  accessToken: string,
+  skuList: DailySalesSkuListItem[]
+): Promise<SkuRefundRateResponse["Data"]> => {
+  const request = {
+    marketplace: userInfo.marketplace,
+    sellerId: userInfo.sellerId,
+    skuList,
+    requestedDay: 0,
+  };
+
+  const response = await fetchSkuRefundRateRequest(request, accessToken);
+  return response.Data;
 };
 
 export const actions: ActionTree<ChartState, RootState> = {
   async fetchChartInformation({ commit, rootState }, payload) {
     try {
-      const chartData = [];
-      console.log("Fetching chart information...", payload);
-      const userInformation = rootState.auth.userInformation;
+      const accessToken = ensureAccessToken(rootState.auth.accessToken);
+      const userInformation = validateUserInformation(
+        rootState.auth.userInformation
+      );
+      const days = payload?.days;
 
-      for (const userInfo of userInformation) {
-        if (!rootState.auth.accessToken) {
-          throw new Error("Access token is missing");
-        }
-
-        const chartRequestData = {
-          marketplace: userInfo.marketplace,
-          sellerId: userInfo.sellerId,
-          requestStatus: userInfo.requestStatus,
-          day: payload ? payload.days : userInfo.day,
-          excludeYoYData: userInfo.excludeYoYData,
-        };
-
-        const response = await fetchChartInformationRequest(
-          chartRequestData,
-          rootState.auth.accessToken,
-        );
-
-        if (response.Data.item.length > 0) {
-          chartData.push(response.Data.item);
-        }
-      }
+      const chartData = await Promise.all(
+        userInformation.map((user) =>
+          fetchChartDataForUser(user, accessToken, days ?? user.day)
+        )
+      );
 
       commit(SET_CHART_DATA, chartData.flat());
     } catch (error) {
@@ -85,42 +90,44 @@ export const actions: ActionTree<ChartState, RootState> = {
 
   async fetchTableData(
     { commit, rootState }: ActionContext<ChartState, RootState>,
-    payload: FetchTableDataPayload,
+    payload: FetchTableDataPayload
   ) {
     try {
-      if (!rootState.auth.accessToken) {
-        throw new Error("Access token is missing");
-      }
-      const userInformation = rootState.auth.userInformation;
+      const accessToken = ensureAccessToken(rootState.auth.accessToken);
+      const userInformation = validateUserInformation(
+        rootState.auth.userInformation
+      );
       const { columns, pageNumber } = payload;
-      const tableData = [];
-      for (const userInfo of userInformation) {
-        const chartRequestData = {
-          isDaysCompare: columns.length === 2 ? 1 : 0,
-          marketplace: userInfo.marketplace,
-          sellerId: userInfo.sellerId,
-          salesDate: columns[0].date,
-          salesDate2: columns.length === 2 ? columns[1].date : columns[0].date,
-          pageSize: 5,
-          pageNumber: pageNumber,
-        };
+      const [salesDate, salesDate2] =
+        columns.length === 2
+          ? [columns[0].date, columns[1].date]
+          : [columns[0].date, columns[0].date];
 
-        const response = await fetchTableDataRequest(
-          chartRequestData,
-          rootState.auth.accessToken,
-        );
+      const tableData = await Promise.all(
+        userInformation.map(async (user) => {
+          const requestData = {
+            isDaysCompare: columns.length === 2 ? 1 : 0,
+            marketplace: user.marketplace,
+            sellerId: user.sellerId,
+            salesDate,
+            salesDate2,
+            pageSize: DEFAULT_PAGE_SIZE,
+            pageNumber,
+          };
 
-        const skuRefundRate = await fetchSkuRefundRate(
-          userInfo,
-          rootState,
-          response.Data.item.skuList,
-        );
-        tableData.push(skuRefundRate);
-      }
+          const response = await fetchTableDataRequest(
+            requestData,
+            accessToken
+          );
+          const skuList = response?.Data?.item?.skuList ?? [];
 
-      commit(SET_TABLE_DATA, tableData.flat());
+          return fetchSkuRefundRate(user, accessToken, skuList);
+        })
+      );
 
-      return tableData.flat();
+      const flatData = tableData.flat();
+      commit(SET_TABLE_DATA, flatData);
+      return flatData;
     } catch (error) {
       console.error("Error fetching table data:", error);
       throw error;
