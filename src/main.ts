@@ -1,24 +1,10 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import { store } from "./store";
-
-import "./style.css";
-import LoginView from "./components/auth/LoginView.vue";
-import { createRouter } from "vue-router";
-import { createWebHistory } from "vue-router";
-import Dashboard from "./components/sales/Dashboard.vue";
-
+import router from "./router";
 import VueApexCharts from "vue3-apexcharts";
 
-const routes = [
-  { path: "/login", component: LoginView },
-  { path: "/daily-sales", component: Dashboard },
-];
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
+import "./style.css";
 
 const app = createApp(App);
 
